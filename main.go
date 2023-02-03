@@ -8,7 +8,23 @@ import (
 // Define a home handler function which writes a byte slice containing
 // "Hello from Snippetbox" as the response body.
 func home(w http.ResponseWriter, r *http.Request) {
+	// Check if the current request URL exactly matches "/". If it doesn't, use
+	// the http.NotFound() function send a 404 response to the client.
+	// Importantly, we then return from the handler. If we don't return the handler
+	// would keep execting and also write the "Hello from SinppetBox" message.
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
 	w.Write([]byte("Hello from Snippetbox"))
+}
+
+func sinppetView(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Display a specific snippet..."))
+}
+
+func snippetCreate(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Create a new snippet..."))
 }
 
 func main() {
@@ -16,7 +32,13 @@ func main() {
 	// Use the http.NewServeMux() function to initialize a new servemux, then
 	// register the home function as the handler for the "/" URL pattern.
 	mux := http.NewServeMux()
+
+	// URL patterns: subtree paths
 	mux.HandleFunc("/", home)
+
+	// URL patterns: fixed paths
+	mux.HandleFunc("/snippet/view", sinppetView)
+	mux.HandleFunc("/snippet/create", snippetCreate)
 
 	// Use the http.ListenAndServe() function to start a new web server. We pass in
 	// two parameters: the TCP network address to listen on (in this case ":4000")
