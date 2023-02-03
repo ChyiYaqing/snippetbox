@@ -7,3 +7,4 @@
 servemux supports two different types of URL patterns: `fixed paths` and `subtree paths`.
     * fixed paths: don't end with a trailing slash.
     * subtree paths: do end with a trailing slash.
+
