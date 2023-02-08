@@ -1,10 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"flag"
 	"log"
 	"net/http"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type config struct {
@@ -25,6 +28,9 @@ func main() {
 
 	flag.StringVar(&cfg.addr, "addr", ":4000", "HTTP network address")
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static", "Path to static assets")
+	// Define a new command-line flag for the MySQL DSN string.
+	// username:password@protocol(ipaddress:port)/dbname?param=value
+	dsn := flag.String("dsn", "web:macintosh@tcp(Bandwagon:13306)/snippetbox?parseTime=true", "MySQL data source name")
 	flag.Parse()
 
 	// Use log.New() to create a logger for writing information messages. This takes
@@ -38,6 +44,15 @@ func main() {
 	// the destination and use the log.Lshortfile flag to include the releveant
 	// file name and line number.
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	db, err := openDB(*dsn)
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
+	// We also define a call to db.Close(), so that the connection pool is closed
+	// before the main() function exits.
+	defer db.Close()
 
 	// Initialize a new instance of our application struct, containing the
 	// dependencies
@@ -57,7 +72,26 @@ func main() {
 	}
 
 	infoLog.Printf("Staring server on %s", cfg.addr)
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	// log.Fatal() function will also call os.Exit(1) after writing the message.
 	errorLog.Fatal(err)
+}
+
+// The openDB() function wraps sql.Open() and returns a sql.DB connection pool
+// for a given DSN.
+func openDB(dsn string) (*sql.DB, error) {
+	db, err := sql.Open("mysql", dsn)
+	if err != nil {
+		return nil, err
+	}
+
+	// Actual connections to the database are estabilished lazily. as and when
+	// needed for the first time. So to verify that everything is set up correctly
+	// we need to use the db.Ping() method to create a connection and check for
+	// any errors.
+	if err = db.Ping(); err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
