@@ -1,9 +1,15 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+)
 
 func (app *application) routes() *http.ServeMux {
 	mux := http.NewServeMux()
+
+	mux.Handle("/metrics", promhttp.Handler())
 
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))

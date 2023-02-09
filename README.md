@@ -1,10 +1,9 @@
-* handler:
-> responsible for executing application logic and for writing HTTP response headers and bodies.
+# [Let's Go!](https://lets-go.alexedwards.net/)
 
-* router: (servemux)
-> This stores a mapping between the URL patterns for your application and the corresponding handlers.
+> Learn to Build Professional Web Applications with Go
 
-servemux supports two different types of URL patterns: `fixed paths` and `subtree paths`.
-    * fixed paths: don't end with a trailing slash.
-    * subtree paths: do end with a trailing slash.
+Let's Go is a clear, concise and easy-to-follow guide to web development with Go.
+
+It packs in everything you need to know about best practices, project structure 
+and practical code patterns -- without skimping on important details and explanations.
 

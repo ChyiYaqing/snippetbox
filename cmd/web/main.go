@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/chyiyaqing/snippetbox/internal"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -30,7 +31,7 @@ func main() {
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static", "Path to static assets")
 	// Define a new command-line flag for the MySQL DSN string.
 	// username:password@protocol(ipaddress:port)/dbname?param=value
-	dsn := flag.String("dsn", "web:macintosh@tcp(Huawei:13306)/snippetbox?parseTime=true", "MySQL data source name")
+	dsn := flag.String("dsn", "web:macintosh@tcp(HuaWei:13306)/snippetbox?parseTime=true", "MySQL data source name")
 	flag.Parse()
 
 	// Use log.New() to create a logger for writing information messages. This takes
@@ -68,7 +69,7 @@ func main() {
 	srv := &http.Server{
 		Addr:     cfg.addr,
 		ErrorLog: errorLog,
-		Handler:  app.routes(),
+		Handler:  internal.PrometheusMiddleware(app.routes()),
 	}
 
 	infoLog.Printf("Staring server on %s", cfg.addr)
