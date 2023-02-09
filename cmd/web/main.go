@@ -30,7 +30,7 @@ func main() {
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static", "Path to static assets")
 	// Define a new command-line flag for the MySQL DSN string.
 	// username:password@protocol(ipaddress:port)/dbname?param=value
-	dsn := flag.String("dsn", "web:macintosh@tcp(Bandwagon:13306)/snippetbox?parseTime=true", "MySQL data source name")
+	dsn := flag.String("dsn", "web:macintosh@tcp(Huawei:13306)/snippetbox?parseTime=true", "MySQL data source name")
 	flag.Parse()
 
 	// Use log.New() to create a logger for writing information messages. This takes
