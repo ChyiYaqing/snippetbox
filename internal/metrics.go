@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -84,7 +83,6 @@ func PrometheusMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(rw, r)
 
 		duration := time.Since(start).Seconds()
-		fmt.Printf("path=%s, method=%s, code=%d, duration=%f \n", path, r.Method, rw.statusCode, float64(duration))
 		statusCode := rw.statusCode
 		responseStatus.WithLabelValues(path, r.Method, strconv.Itoa(statusCode)).Inc()
 		responseTimeHistogram.WithLabelValues(path, r.Method, strconv.Itoa(statusCode)).Observe(float64(duration))
