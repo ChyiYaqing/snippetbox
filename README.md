@@ -9,3 +9,11 @@ and practical code patterns -- without skimping on important details and explana
 
 
 ## Chapter 6. Middleware
+
+* Panic recovery
+
+In a simple Go application, when your code panics it will result in the application being terminated straight away.
+
+But web application is a bit more sophisticated. Go's HTTP server assumes that the effect of any panic is isolated to the goroutine serving the active HTTP request (remember, every request is handled in it's own goroutine).
+
+
