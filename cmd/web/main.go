@@ -105,7 +105,7 @@ func main() {
 	}
 
 	infoLog.Printf("Staring server on %s", cfg.addr)
-	err = srv.ListenAndServe()
+	err = srv.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
 	// log.Fatal() function will also call os.Exit(1) after writing the message.
 	errorLog.Fatal(err)
 }
