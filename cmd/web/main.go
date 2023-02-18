@@ -114,6 +114,10 @@ func main() {
 		ErrorLog:  errorLog,
 		Handler:   internal.PrometheusMiddleware(app.routes()),
 		TLSConfig: tlsConfig,
+		// Add Idle, Read and Write timeout to the server.
+		IdleTimeout:  time.Minute,     // automatically closed after 1 minute of inactivity
+		ReadTimeout:  5 * time.Second, // helps to mitigate the risk from slow-client attacks.
+		WriteTimeout: 10 * time.Second,
 	}
 
 	infoLog.Printf("Staring server on %s", cfg.addr)
