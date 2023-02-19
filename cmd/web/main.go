@@ -29,8 +29,8 @@ type config struct {
 type application struct {
 	errorLog      *log.Logger
 	infoLog       *log.Logger
-	snippets      *models.SnippetModel
-	users         *models.UserModel
+	snippets      models.SnippetModelInterface
+	users         models.UserModelInterface
 	templateCache map[string]*template.Template
 	// Add a formDecoder field to hold a pointer to a form.Decoder instance.
 	formDecoder    *form.Decoder
