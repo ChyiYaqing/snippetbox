@@ -27,6 +27,7 @@ type config struct {
 // web application. For now we'll only include fields for the two custom loggers, but
 // we'll add more to it as the build progresses.
 type application struct {
+	debug         bool // Add a new debug field.
 	errorLog      *log.Logger
 	infoLog       *log.Logger
 	snippets      models.SnippetModelInterface
@@ -45,6 +46,7 @@ func main() {
 	// Define a new command-line flag for the MySQL DSN string.
 	// username:password@protocol(ipaddress:port)/dbname?param=value
 	dsn := flag.String("dsn", "web:macintosh@tcp(HuaWei:13306)/snippetbox?parseTime=true", "MySQL data source name")
+	debug := flag.Bool("debug", false, "Enable debug mode")
 	flag.Parse()
 
 	// Use log.New() to create a logger for writing information messages. This takes
@@ -88,6 +90,7 @@ func main() {
 	// Initialize a new instance of our application struct, containing the
 	// dependencies
 	app := &application{
+		debug:          *debug, // Add the debug flag value to the application struct
 		errorLog:       errorLog,
 		infoLog:        infoLog,
 		snippets:       &models.SnippetModel{DB: db},
